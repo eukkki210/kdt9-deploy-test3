@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const aws = require('aws-sdk'); // aws 설정을 위한 모듈
-const multers3 = require('multer-s3'); // aws s3에 업로드하기 위한 multer 설정
+const multerS3 = require('multer-s3'); // aws s3에 업로드하기 위한 multer 설정
 const app = express();
 const PORT = 8000;
 
@@ -34,7 +34,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 // const upload = multer({ storage });
 // multer 설정 - aws
 const upload = multer({
-    storage: multers3({
+    storage: multerS3({
         s3: s3,
         bucket: 'kdt-test-bucket-seunggi',
         acl: 'public-read', // 파일 접근 권한 (public-read로 해야 업로드된 팡ㄹ이 공개)
@@ -53,6 +53,7 @@ app.get('/', (req, res) => {
 });
 //multer업로드
 app.post('/upload', upload.array('files'), (req, res) => {
+    console.log('업로드된 파일:', req.files);
     res.send(req.files);
 });
 
